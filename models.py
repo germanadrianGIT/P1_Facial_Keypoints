@@ -7,6 +7,9 @@ import torch.nn.functional as F
 # can use the below import should you choose to initialize the weights of your Net
 import torch.nn.init as I
 
+def print_tensor_info(x):
+    print("x type:", type(x))
+    print("x shape:", x.shape)
 
 class Net(nn.Module):
 
@@ -87,6 +90,9 @@ class Net(nn.Module):
         # 3 Activation1 (32, 93, 93)
         # 4 Maxpooling2d1 (32, 46, 46)
         # 5 Dropout1 (32, 46, 46)
+        
+        print_tensor_info(x)
+        
         x = self.pool(F.relu(self.conv1(x)))
         x = self.dropout(x)        
                 
@@ -94,6 +100,8 @@ class Net(nn.Module):
         # 7 Activation2 (64, 44, 44)
         # 8 Maxpooling2d2 (64, 22, 22)
         # 9 Dropout2 (64, 22, 22)
+        print_tensor_info(x)
+        
         x = self.pool(F.relu(self.conv2(x)))
         x = self.dropout(x)
        
@@ -101,6 +109,8 @@ class Net(nn.Module):
         # 11 Activation3 (128, 21, 21)
         # 12 Maxpooling2d3 (128, 10, 10)
         # 13 Dropout3 (128, 10, 10)
+        print_tensor_info(x)
+        
         x = self.pool(F.relu(self.conv3(x)))
         x = self.dropout(x)
         
