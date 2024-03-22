@@ -69,9 +69,8 @@ class Net(nn.Module):
         
         # 1000 inputs, 1000 output channels
         self.fc2 = nn.Linear(1000, 1000)  # Fully connected layer 2
-        # 1000 input channels, 2 output channels
-        # (for the 2 classes)???----------------------------------------------------------------------------->>
-        self.fc3 = nn.Linear(1000, 2)  # Fully connected layer 3
+        # 1000 input channels, 136 output channels(136 values, 2 for each of the 68 keypoint (x, y) pairs)
+        self.fc3 = nn.Linear(1000, 136)  # Fully connected layer 3
         
         self.dropout = nn.Dropout(p=0.4)  # Dropout layer
 
@@ -118,28 +117,40 @@ class Net(nn.Module):
         # 15 Activation4 (256, 10, 10)
         # 16 Maxpooling2d4 (256, 5, 5)
         # 17 Dropout4 (256, 5, 5)
+        print_tensor_info(x)
+        
         x = self.pool(F.relu(self.conv4(x)))
         x = self.dropout(x)
         
         # 18 Flatten1 (6400)
         # Flatten the tensor for fully connected layers
+        print_tensor_info(x)
+        
         x = x.view(-1, 256 * 5 * 5)
 
         # Apply fully connected layers with ReLU activation and dropout
         # 19 Dense1 (1000)
         # 20 Activation5 (1000)
         # 21 Dropout5 (1000)
+        print_tensor_info(x)
+        
         x = F.relu(self.fc1(x))
         x = self.dropout(x)
         
         # 22 Dense2 (1000)
         # 23 Activation6 (1000)
         # 24 Dropout6 (1000)
+        print_tensor_info(x)
+        
         x = F.relu(self.fc2(x))
         x = self.dropout(x)
         
         # 25 Dense3 (2)
+        print_tensor_info(x)
+        
         x = self.fc3(x)
+        
+        print_tensor_info(x)
         
         # a modified x, having gone through all the layers of your model, should be returned
         return x
